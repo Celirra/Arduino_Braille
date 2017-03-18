@@ -1,10 +1,18 @@
-char receivedChar;
-boolean newData = false;
+// Kevin Freeman
+// Software Engineering Student at UWO
+// Made for RUHacks 2017
+// March 18, 2017
+// github.com/Celirra
+
+
+char receivedChar;  // The character received from the Serial input
+boolean newData = false;  // Records whether or not there is a new character to be displayed
 
 
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
+  // Simple initialization
   pinMode(2, OUTPUT);
   pinMode(3, OUTPUT);
   pinMode(4, OUTPUT);
@@ -13,8 +21,10 @@ void setup() {
   pinMode(7, OUTPUT);
 }
 void recvOneChar() {
+  // Read one character from the Serial input
   if (Serial.available() > 0) {
     receivedChar = Serial.read();
+    // inform that there is a new character to be displayed
     newData = true;
   }
 }
@@ -26,6 +36,8 @@ void cInput(char c) {
   // * 3  6 *
   // * 4  7 *
   // ********
+
+  // Simple switch:case method to determine character to be displayed. Character c is the sent variable, where each case determines the character in question.
   switch (c) {
     case 'a':
       digitalWrite(2, HIGH);
@@ -238,30 +250,21 @@ void cInput(char c) {
     default:
       break;
   }
-
-
-
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  //  digitalWrite(2, !digitalRead(2));
-  //  delay(500);
-  //  digitalWrite(2, !digitalRead(2));
-  //  digitalWrite(4, !digitalRead(4));
-  //  delay(500);
-  //  digitalWrite(2, !digitalRead(2));
-  //  digitalWrite(4, !digitalRead(4));
-  //  digitalWrite(6, !digitalRead(6));
-  //  delay(500);
-  //  cInput('a');
 
+  // Checks and gets the newest character in the Serial output
   recvOneChar();
+
+  // If there was a character recieved from the previous function call
   if (newData) {
-    cInput(receivedChar);
-    newData = false;
+    cInput(receivedChar);   // Output the character received from the recvOneChar function call
+    newData = false;        // Says that the newest value was displayed.
   }
-  delay(1000);
+  delay(1000);       // Delay to ensure that there is no issue when there is a string entered into the Serial instead of a mere character, 
+                     // and to gradually display an entire string.
 }
 
 
