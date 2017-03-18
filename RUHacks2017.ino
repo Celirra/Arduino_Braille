@@ -8,7 +8,6 @@
 char receivedChar;  // The character received from the Serial input
 boolean newData = false;  // Records whether or not there is a new character to be displayed
 
-
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
@@ -22,12 +21,17 @@ void setup() {
 }
 void recvOneChar() {
   // Read one character from the Serial input
+  Serial.println("a");
   if (Serial.available() > 0) {
     receivedChar = Serial.read();
     // inform that there is a new character to be displayed
     newData = true;
   }
+  
 }
+
+
+
 void cInput(char c) {
   // obtained input
   // PIN LAYOUT:
@@ -36,6 +40,41 @@ void cInput(char c) {
   // * 3  6 *
   // * 4  7 *
   // ********
+
+  // Upper case checking (upper case in braille has bottom-right as ON before displaying the character)
+  if (c >= 65 && c <= 90){
+      digitalWrite(2, LOW);
+      digitalWrite(3, LOW);
+      digitalWrite(4, LOW);
+      digitalWrite(5, LOW);
+      digitalWrite(6, LOW);
+      digitalWrite(7, HIGH);
+      delay(1000);
+      c += 32;
+  }
+  
+    // Numeric checking (numeric in braille has pins 4, 5, 6, 7 as ON before displaying the character)
+  if (c >= 49 && c <=57){
+      digitalWrite(2, LOW);
+      digitalWrite(3, LOW);
+      digitalWrite(4, HIGH);
+      digitalWrite(5, HIGH);
+      digitalWrite(6, HIGH);
+      digitalWrite(7, HIGH);
+      delay(1000);
+      c+= 48;
+  }
+      // Zero checking (numeric in braille has pins 4, 5, 6, 7 as ON before displaying the character)
+  if (c == 48){
+          digitalWrite(2, LOW);
+      digitalWrite(3, LOW);
+      digitalWrite(4, HIGH);
+      digitalWrite(5, HIGH);
+      digitalWrite(6, HIGH);
+      digitalWrite(7, HIGH);
+      delay(1000);
+      c+= 58;
+  }
 
   // Simple switch:case method to determine character to be displayed. Character c is the sent variable, where each case determines the character in question.
   switch (c) {
@@ -248,6 +287,12 @@ void cInput(char c) {
       digitalWrite(7, HIGH);
       break;
     default:
+      digitalWrite(2, LOW);
+      digitalWrite(3, LOW);
+      digitalWrite(4, LOW);
+      digitalWrite(5, LOW);
+      digitalWrite(6, LOW);
+      digitalWrite(7, LOW);
       break;
   }
 }
